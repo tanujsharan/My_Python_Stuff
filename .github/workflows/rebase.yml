@@ -1,33 +1,24 @@
-name: Daily Rebase Pull Request
+name: Auto Rebase Pull Request
 
 on:
   schedule:
-    - cron: "*/5 * * * *" 
+    - cron: '*/5 * * * *' # Runs every 5 minutes
 
 jobs:
-  rebase:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Create rebase branch
-        run: git checkout -B rebase-branch main
-
-      - name: Rebase dev branch
-        run: git pull origin dev
-
-      - name: Push changes
-        run: git push --force-with-lease origin rebase-branch
-
-      - name: Create pull request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          branch: rebase-branch
-          title: Automated rebase pull request
-          body: This pull request is automatically created to rebase changes from the dev branch to the main branch.
-
-          # Adjust these values to match your repository and desired target branch
-          base: main
-          repository: tanujsharan/My_Python_Stuff
+      - name: Rebase and create pull request
+        run: |
+          git config user.name tanujsharan
+          git config user.email tanujsharan22@gmail.com
+          git checkout main
+          git pull
+          git checkout dev
+          git rebase main
+          git push --force-with-lease origin dev
+          gh pr create --base main --head dev --title "Auto Rebase Pull Request"
