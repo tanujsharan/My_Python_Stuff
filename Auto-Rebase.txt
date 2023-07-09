@@ -1,4 +1,2 @@
-This file has been created to test the POC for Auto-Rebase of PR from Main to Dev
-Adding this line to test autorebase PR from main to dev 
 
 Since the content of this file has been removed from Dev branch we can test if rebase is working.
