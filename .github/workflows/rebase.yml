@@ -27,3 +27,5 @@ jobs:
           git rebase main
           git push --force-with-lease origin dev
           gh pr create --base dev --head main --title "Auto Rebase Pull Request" --body "Automated pull request from main to dev"
+          git add Auto-Rebase.txt  # Replace with the appropriate file path if needed
+          git rebase --continue
