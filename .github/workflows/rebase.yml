@@ -24,4 +24,4 @@ jobs:
           git checkout dev
           git rebase main
           git push --force-with-lease origin dev
-          gh pr create --base main --head dev --title "Auto Rebase Pull Request"
+          gh pr create --base main --head dev --title "Auto Rebase Pull Request" --body "Automated rebase of PR from main to dev."
