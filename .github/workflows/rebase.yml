@@ -1,27 +1,36 @@
-name: Auto Rebase Pull Request
+name: Create Pull Request
 
 on:
-  schedule:
-    - cron: '*/5 * * * *' # Runs every 5 minutes
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  create-pr:
     runs-on: ubuntu-latest
-    
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Rebase and create pull request
+      - name: Configure Git
         run: |
           git config user.name tanujsharan
           git config user.email tanujsharan22@gmail.com
-          git checkout main
-          git pull
-          git checkout dev
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt install gh
+
+      - name: Create Pull Request
+        run: |
+          git checkout -B dev origin/dev
           git rebase main
           git push --force-with-lease origin dev
-          gh pr create --base dev --head main --title "Auto Rebase Pull Request" --body "Automated rebase of PR from main to dev."
+          gh pr create --base dev --head main --title "Auto Rebase Pull Request" --body "Automated pull request from main to dev"
